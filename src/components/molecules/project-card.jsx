@@ -50,7 +50,7 @@ const ProjectCard = ({ submission }) => {
         href={`/${submission.url}`}
         className="text-base font-semibold line-clamp-1 group-hover:underline"
       >
-        {submission.title}
+        {submission.title ?? submission.url}
       </Link>
       <p className="text-xs text-muted-foreground line-clamp-3">
         {submission.description}
