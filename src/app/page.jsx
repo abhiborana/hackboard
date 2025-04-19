@@ -1,54 +1,73 @@
 "use client";
 
+import { getSupaProjects } from "@/actions";
 import AddProject from "@/components/molecules/add-project";
 import ProjectCard from "@/components/molecules/project-card";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import useHackboard from "@/store";
-import { supabaseClient } from "@/supabase";
 import { AlertCircleIcon, ServerCrashIcon } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+
+const sortTypes = ["likes", "created_at", "title"];
 
 const Hackboard = () => {
   const [status, setStatus] = useState(null);
   const dispatch = useHackboard((state) => state.dispatch);
   const projects = useHackboard((state) => state.projects);
+  const [sortType, setSortType] = useState("likes");
   const [query, setQuery] = useState("");
 
   const getProjects = async () => {
     setStatus("loading");
-    const { data: projects, error } = await supabaseClient
-      .from("submissions")
-      .select("*")
-      .range(0, 100);
-    if (error) {
-      setStatus("error");
-      dispatch({
-        type: "SET_STATE",
-        payload: {
-          projects: [],
-        },
-      });
-    }
-    if (projects) {
-      setStatus("success");
-      dispatch({ type: "SET_STATE", payload: { projects } });
-    }
+    const projects = await getSupaProjects();
+    setStatus("success");
+    dispatch({
+      type: "SET_STATE",
+      payload: { projects },
+    });
   };
 
   const filteredProjects = useMemo(() => {
-    if (!query) return projects;
-    return projects.filter((project) => {
-      const { title, team_name, url } = project;
-      return (
-        title.toLowerCase().includes(query.toLowerCase()) ||
-        team_name.toLowerCase().includes(query.toLowerCase()) ||
-        url.toLowerCase().includes(query.toLowerCase())
-      );
+    let resp;
+    if (!query) resp = projects;
+    else
+      resp = projects.filter((project) => {
+        const { title, team_name, url } = project;
+        return (
+          title.toLowerCase().includes(query.toLowerCase()) ||
+          team_name.toLowerCase().includes(query.toLowerCase()) ||
+          url.toLowerCase().includes(query.toLowerCase())
+        );
+      });
+    if (sortType === "likes") {
+      return [...resp].sort((a, b) => b.likes - a.likes);
+    } else if (sortType === "created_at") {
+      return [...resp].sort((a, b) => {
+        const dateA = new Date(a.created_at);
+        const dateB = new Date(b.created_at);
+        return dateB - dateA;
+      });
+    }
+    return [...resp].sort((a, b) => {
+      const titleA = a.title.toLowerCase();
+      const titleB = b.title.toLowerCase();
+      if (titleA < titleB) return -1;
+      if (titleA > titleB) return 1;
+      return 0;
     });
-  }, [query, projects]);
+  }, [query, projects, sortType]);
 
   useEffect(() => {
     if (status === "loading" || projects.length) return;
@@ -56,7 +75,7 @@ const Hackboard = () => {
   }, [status, projects]);
   return (
     <div className="flex flex-col gap-2 w-full h-full px-4 md:px-0">
-      <div className="flex justify-between w-full items-start gap-4 flex-wrap">
+      <div className="flex justify-between w-full items-start gap-2 flex-wrap">
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold tracking-tight">Hackboard</h1>
           <p className="text-base text-muted-foreground">
@@ -64,14 +83,34 @@ const Hackboard = () => {
             You can create a project, and share it with the world.
           </p>
         </div>
-        <Input
-          placeholder="Search a Project, Team name, or URL"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className={"sm:max-w-xs"}
-        />
+        <div className="flex items-center gap-2">
+          <Input
+            placeholder="Search a Project, Team name, or URL"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className={"sm:max-w-xs"}
+          />
+          <Select
+            onValueChange={setSortType}
+            defaultValue={sortType}
+            className="capitalize"
+          >
+            <SelectTrigger className="w-fit">
+              <SelectValue placeholder={sortType} value={sortType} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Sort By</SelectLabel>
+                {sortTypes.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
-
       <Separator />
       <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 py-6">
         <AddProject refetch={getProjects} />

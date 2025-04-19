@@ -1,8 +1,8 @@
 "use client";
 
+import { updateLikes } from "@/actions";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { cn } from "@/lib/utils";
-import { supabaseClient } from "@/supabase";
 import { HeartIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,17 +16,11 @@ const ProjectCard = ({ submission }) => {
 
   const handleToggleLike = async () => {
     if (liked.includes(submission.id)) {
-      await supabaseClient
-        .from("submissions")
-        .update({ likes: submission.likes - 1 })
-        .eq("id", submission.id);
+      await updateLikes(submission.likes - 1, submission.id);
       setLiked(liked.filter((id) => id !== submission.id));
       setLikeCount((prev) => prev - 1);
     } else {
-      await supabaseClient
-        .from("submissions")
-        .update({ likes: submission.likes + 1 })
-        .eq("id", submission.id);
+      await updateLikes(submission.likes + 1, submission.id);
       setLiked([...liked, submission.id]);
       setLikeCount((prev) => prev + 1);
     }
@@ -73,7 +67,7 @@ const ProjectCard = ({ submission }) => {
         <HeartIcon
           className={cn(
             "inline-flex",
-            liked.includes(submission.id) ? "fill-rose-500" : "",
+            liked.includes(submission.id) ? "fill-rose-500 text-rose-500" : "",
           )}
         />
         <span className="text-xs text-muted-foreground">{likeCount}</span>

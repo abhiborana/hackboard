@@ -1,6 +1,6 @@
 "use client";
 
-import { getMetadata } from "@/actions";
+import { getMetadata, saveProject } from "@/actions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,7 +13,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { addProjectSchema } from "@/schema";
-import { supabaseClient } from "@/supabase";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckIcon, PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -70,12 +69,7 @@ const AddProject = ({ refetch }) => {
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
-    const { error } = await supabaseClient
-      .from("submissions")
-      .insert(data)
-      .select("*")
-      .single();
+    const error = await saveProject(data);
     if (error) {
       console.error("Error inserting data:", error);
       return toast.error("Failed to add project");
