@@ -2,6 +2,7 @@ import Footer from "@/components/organisms/footer";
 import Header from "@/components/organisms/header";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
+import { Analytics } from "@vercel/analytics/react";
 import { ThemeProvider } from "next-themes";
 import { Geist } from "next/font/google";
 import "./globals.css";
@@ -43,6 +44,7 @@ export default function RootLayout({ children }) {
             </div>
           </div>
           <Toaster richColors enableSystem position="top-center" />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
