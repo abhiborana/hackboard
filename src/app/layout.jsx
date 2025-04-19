@@ -1,5 +1,6 @@
 import Footer from "@/components/organisms/footer";
 import Header from "@/components/organisms/header";
+import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "next-themes";
 import { Geist } from "next/font/google";
@@ -32,7 +33,7 @@ export default function RootLayout({ children }) {
             <div className="border-dashed lg:border flex flex-1 flex-col">
               <Header />
               <main className="flex-1 flex flex-col">
-                <div className="container-wrapper lg:border-x">
+                <div className="container-wrapper lg:border-x flex justify-center">
                   <div className="container md:px-6 flex flex-col flex-1 items-start py-6 lg:py-8">
                     {children}
                   </div>
@@ -41,6 +42,7 @@ export default function RootLayout({ children }) {
               <Footer />
             </div>
           </div>
+          <Toaster richColors enableSystem position="top-center" />
         </ThemeProvider>
       </body>
     </html>
