@@ -39,5 +39,5 @@ export const saveProject = async (data) => {
 };
 
 export const updateLikes = async (likes, id) => {
-  await supabase.from("projects").update({ likes }).eq("id", submission.id);
+  await supabase.from("projects").update({ likes }).eq("id", id);
 };
