@@ -3,6 +3,8 @@ import { Card } from "@/components/ui/card";
 import { supabaseClient } from "@/supabase";
 import { AlertCircleIcon, ServerCrashIcon } from "lucide-react";
 
+export const revalidate = 0;
+
 const Projects = async () => {
   const { data: projects, error } = await supabaseClient
     .from("submissions")
