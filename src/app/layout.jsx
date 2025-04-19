@@ -12,9 +12,47 @@ const geist = Geist({
 });
 
 export const metadata = {
-  title: "Hackboard - Showcase your next hackathon projects",
+  generator: "Next.js",
+  applicationName: "Hackboard",
+  robots: {
+    index: true,
+    follow: true,
+    "max-snippet": -1,
+    "max-image-preview": "large",
+    "max-video-preview": -1,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  referrer: "no-referrer-when-downgrade",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+  },
+  title: "Hackboard - showcase your skills",
   description:
-    "Hackboard is a platform to showcase your next.js hackathon projects",
+    "Hackboard is a platform to showcase your next.js hackathon projects. You can create a project, and share it with the world.",
+  keywords: [
+    "hackathon",
+    "projects",
+    "showcase",
+    "nextjs",
+    "hackboard",
+    "portfolio",
+    "web development",
+    "nextjs projects",
+    "nextjs showcase",
+    "nextjs portfolio",
+    "nextjs hackathon",
+    "nextjs hackathon projects",
+    "nextjs hackathon showcase",
+    "nextjs hackathon portfolio",
+    "nextjs hackathon portfolio showcase",
+    "nextjs hackathon portfolio projects",
+  ],
 };
 
 export default function RootLayout({ children }) {

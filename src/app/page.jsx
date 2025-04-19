@@ -10,7 +10,7 @@ const Hackboard = () => {
       <h1 className="text-3xl font-bold tracking-tight">Hackboard</h1>
       <p className="text-base text-muted-foreground">
         Hackboard is a platform to showcase your next.js hackathon projects. You
-        can create a project, add a description, and share it with the world.
+        can create a project, and share it with the world.
       </p>
       <Separator />
       <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 py-6">
