@@ -1,3 +1,5 @@
+import Footer from "@/components/organisms/footer";
+import Header from "@/components/organisms/header";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "next-themes";
 import { Geist } from "next/font/google";
@@ -17,7 +19,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={cn("antialiased", geist.className)}
+        className={cn("antialiased min-h-svh bg-background", geist.className)}
         cz-shortcut-listen="true"
       >
         <ThemeProvider
@@ -26,7 +28,19 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <div className="relative flex min-h-svh flex-col bg-background">
+            <div className="border-dashed lg:border flex flex-1 flex-col">
+              <Header />
+              <main className="flex-1 flex flex-col">
+                <div className="container-wrapper lg:border-x">
+                  <div className="container md:px-6 flex flex-col flex-1 items-start py-6 lg:py-8">
+                    {children}
+                  </div>
+                </div>
+              </main>
+              <Footer />
+            </div>
+          </div>
         </ThemeProvider>
       </body>
     </html>
