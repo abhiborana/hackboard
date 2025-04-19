@@ -32,7 +32,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 
-const AddProject = () => {
+const AddProject = ({ refetch }) => {
   const router = useRouter();
   const [metadata, setMetadata] = useState(false);
 
@@ -84,7 +84,7 @@ const AddProject = () => {
     setMetadata(false);
     form.reset();
     document.getElementById("close").click();
-    router.refresh();
+    refetch();
   };
 
   return (
