@@ -6,7 +6,8 @@ import { AlertCircleIcon, ServerCrashIcon } from "lucide-react";
 const Projects = async () => {
   const { data: projects, error } = await supabaseClient
     .from("submissions")
-    .select("*");
+    .select("*")
+    .range(0, 100);
 
   return error ? (
     <Card
