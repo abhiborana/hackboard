@@ -1,6 +1,6 @@
 "use client";
 
-import { updateLikes } from "@/actions";
+import { addLikes, subtractLikes } from "@/actions";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { cn } from "@/lib/utils";
 import { HeartIcon } from "lucide-react";
@@ -16,11 +16,11 @@ const ProjectCard = ({ submission }) => {
 
   const handleToggleLike = async () => {
     if (liked.includes(submission.id)) {
-      await updateLikes(submission.likes - 1, submission.id);
+      await addLikes(submission.id);
       setLiked(liked.filter((id) => id !== submission.id));
       setLikeCount((prev) => prev - 1);
     } else {
-      await updateLikes(submission.likes + 1, submission.id);
+      await subtractLikes(submission.id);
       setLiked([...liked, submission.id]);
       setLikeCount((prev) => prev + 1);
     }

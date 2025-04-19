@@ -38,6 +38,26 @@ export const saveProject = async (data) => {
   return error;
 };
 
-export const updateLikes = async (likes, id) => {
-  await supabase.from("projects").update({ likes }).eq("id", id);
+export const addLikes = async (id) => {
+  const { data } = await supabase
+    .from("projects")
+    .select("likes")
+    .eq("id", id)
+    .single();
+  await supabase
+    .from("projects")
+    .update({ likes: data.likes + 1 })
+    .eq("id", id);
+};
+
+export const subtractLikes = async (id) => {
+  const { data } = await supabase
+    .from("projects")
+    .select("likes")
+    .eq("id", id)
+    .single();
+  await supabase
+    .from("projects")
+    .update({ likes: data.likes - 1 })
+    .eq("id", id);
 };
