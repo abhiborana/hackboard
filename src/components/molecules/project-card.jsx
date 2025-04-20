@@ -47,7 +47,7 @@ const ProjectCard = ({ submission }) => {
       </div>
       <Link
         target="_blank"
-        href={`/${submission.url}`}
+        href={`${submission.url}`}
         className="text-base font-semibold line-clamp-1 group-hover:underline"
       >
         {submission.title || submission.url}
