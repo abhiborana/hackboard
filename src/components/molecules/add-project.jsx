@@ -86,7 +86,7 @@ const AddProject = ({ refetch }) => {
       <DialogTrigger asChild>
         <Card
           className={
-            "p-4 flex flex-col gap-2 cursor-pointer justify-center items-center text-center aspect-square overflow-hidden hover:scale-105 transition-all duration-500 ease-in-out"
+            "p-4 flex flex-col gap-2 cursor-pointer justify-center items-center text-center sm:aspect-square overflow-hidden hover:scale-105 transition-all duration-500 ease-in-out"
           }
         >
           <PlusIcon className="h-8 w-8 text-muted-foreground" />

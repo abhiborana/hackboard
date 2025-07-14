@@ -3,6 +3,7 @@
 import { addLikes, subtractLikes } from "@/actions";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { cn } from "@/lib/utils";
+import { produce } from "immer";
 import { HeartIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,12 +17,23 @@ const ProjectCard = ({ submission }) => {
 
   const handleToggleLike = async () => {
     if (liked.includes(submission.id)) {
-      await addLikes(submission.id);
-      setLiked(liked.filter((id) => id !== submission.id));
+      await subtractLikes(submission.id);
+      setLiked(
+        produce(liked, (draft) => {
+          const index = draft.indexOf(submission.id);
+          if (index > -1) {
+            draft.splice(index, 1);
+          }
+        }),
+      );
       setLikeCount((prev) => prev - 1);
     } else {
-      await subtractLikes(submission.id);
-      setLiked([...liked, submission.id]);
+      await addLikes(submission.id);
+      setLiked(
+        produce(liked, (draft) => {
+          draft.push(submission.id);
+        }),
+      );
       setLikeCount((prev) => prev + 1);
     }
   };
@@ -38,7 +50,10 @@ const ProjectCard = ({ submission }) => {
           alt={submission.title}
           onError={(e) => {
             e.target.onerror = null; // prevents looping
-            e.target.src = `https://api.dicebear.com/9.x/glass/svg?seed=${submission.title}`; // fallback image
+            e.target.src = `https://icon.horse/icon/${submission.url.replace(
+              /^(https?:\/\/)?(www\.)?/,
+              "",
+            )}`; // fallback image
           }}
           unoptimized
           fill
@@ -47,7 +62,7 @@ const ProjectCard = ({ submission }) => {
       </div>
       <Link
         target="_blank"
-        href={`${submission.url}`}
+        href={submission.url}
         className="text-base font-semibold line-clamp-1 group-hover:underline"
       >
         {submission.title || submission.url}
